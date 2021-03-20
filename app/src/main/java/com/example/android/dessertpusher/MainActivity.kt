@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 
     // Contains all the views
     private lateinit var binding: ActivityMainBinding
+    private lateinit var dessertTimer: DessertTimer
 
     /** Dessert Data **/
 
@@ -74,6 +75,7 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
         binding.dessertButton.setOnClickListener {
             onDessertClicked()
         }
+        dessertTimer = DessertTimer()
 
         // Set the TextViews to the right values
         binding.revenue = revenue
@@ -81,6 +83,16 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 
         // Make sure the correct dessert is showing
         binding.dessertButton.setImageResource(currentDessert.imageId)
+    }
+
+    override fun onLocalVoiceInteractionStopped() {
+        super.onLocalVoiceInteractionStopped()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Timber.i("onStart Called")
+        dessertTimer.startTimer()
     }
 
     override fun onResume() {
@@ -93,13 +105,10 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
         Timber.i("onPause Called")
     }
 
-    override fun onLocalVoiceInteractionStopped() {
-        super.onLocalVoiceInteractionStopped()
-    }
-
     override fun onStop() {
         super.onStop()
         Timber.i("onStop Called")
+        dessertTimer.stopTimer()
     }
 
     override fun onDestroy() {
@@ -110,11 +119,6 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
     override fun onRestart() {
         super.onRestart()
         Timber.i("onRestart Called")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Timber.i("onStart Called")
     }
 
     /**
